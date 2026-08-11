@@ -1,0 +1,321 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Dashboard - Vlim{% endblock %}
+
+{% block estilos %}
+@media (max-width: 768px) {
+
+h1 {
+font-size: 25px
+}
+
+.grid-dashboard-top {
+display: block !important;
+grid-template-columns: 1fr !important;
+}
+.grid-dashboard-top > div {
+width: 100% !important;
+margin-top: 10px;
+}
+
+.tarjetas-resumen > div {
+min-width: 45% !important;
+padding: 12px !important;
+}
+
+.tarjetas-resumen p {
+font-size: 12px !important;
+}
+
+.tarjetas-resumen p[style*="font-size:30px"] {
+font-size: 15px !important;
+}
+
+.tablas-dashboard {
+flex-direction: column !important;
+font-size:12px;
+}
+
+.tablas-dashboard > div {
+min-width: 0 !important;
+width: 100% !important;
+}
+
+.tablas-dashboard table {
+display: block;
+overflow-x: auto;
+white-space: normal;
+}
+}
+{% endblock %}
+
+{% block contenido %}
+<div
+    style="display:flex; justify-content:left; gap:16px; margin-bottom:10px; ; padding:16px; border-radius:12px; align-items:center;">
+    <div
+        style="width:60px; height:60px; background:#FFFFFF; display:flex; align-items:center; justify-content:center; border-radius:50%; box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+        <i class="fa-solid fa-cake-candles" style="color: #4a3524; font-size:40px;"></i>
+    </div>
+    <div style="display:flex; flex-direction:column; justify-content:center;">
+        <h1 style="color:#3D1F1A; margin:0; font-family: 'Playfair Display', serif; font-weight:800;">DASHBOARD - VLIM
+        </h1>
+        <p style="color:#3D1F1A; font-size:14px; margin-top:6px;">¡Bienvenida! Aquí tienes un resumen de tu negocio.</p>
+    </div>
+</div>
+
+<div class="grid-dashboard-top" style="display:grid; grid-template-columns:2.3fr 1fr; gap:10px; align-items:stretch;">
+    <div>
+        <div class="tarjetas-resumen" style="background: none; 
+            border-radius:16px; 
+            display:flex; 
+            gap:15px; 
+            margin-bottom:24px; 
+            flex-wrap:wrap; margin-bottom: 10px">
+
+            <div
+                style="flex:1; min-width:160px; padding:5px 20px;  border-radius:10px; display:flex; align-items:center; gap:14px; background: #FFFFFF; box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+                <div
+                    style="width:50px; height:50px; border-radius:25%; background:#302217; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <i class="fa-solid fa-bag-shopping" style="color:#ffffff; font-size:20px;"></i>
+                </div>
+                <div style="text-align:left;">
+                    <p style="color:#3D1F1A; font-size:15px; letter-spacing:1px; font-weight:600;">TRANSACCIONES</p>
+                    <p style="color:#3D1F1A; font-size:30px; font-weight:bold; margin-top:6px;">{{ total_transacciones
+                        }}
+                    </p>
+                </div>
+            </div>
+
+            <div
+                style="flex:1; min-width:160px; padding:5px 20px; border-radius:10px; display:flex; align-items:center; gap:14px; background: #FFFFFF; box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+                <div
+                    style="width:50px; height:50px; border-radius:25%; background:#a77d1d; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <i class="fa-solid fa-box-open" style="color: #ffffff; font-size:20px;"></i>
+                </div>
+                <div style="text-align:left;">
+                    <p style="color:#3D1F1A; font-size:15px; letter-spacing:1px; font-weight:600;">UNIDADES VENDIDAS</p>
+                    <p style="color:#3D1F1A; font-size:30px; font-weight:bold; margin-top:6px;">{{ total_unidades }}
+                    </p>
+                </div>
+            </div>
+
+            <div
+                style="flex:1; min-width:160px; padding:5px 20px;  border-radius:10px; display:flex; align-items:center; gap:14px; background: #FFFFFF; box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+                <div
+                    style="width:50px; height:50px; border-radius:25%; background:#CAB18E; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <i class="fa-solid fa-coins" style="color: #ffffff; font-size:20px;"></i>
+                </div>
+                <div style="text-align:left;">
+                    <p style="color:#3D1F1A; font-size:15px; letter-spacing:1px; font-weight:600;">INGRESO TOTAL</p>
+                    <p style="color:#3D1F1A; font-size:30px; font-weight:bold; margin-top:6px;">S/ {{ ingresos_totales
+                        }}
+                    </p>
+                </div>
+            </div>
+
+            <div
+                style="flex:1; min-width:160px; padding:5px 20px;  border-radius:10px; display:flex; align-items:center; gap:14px; background: #FFFFFF; box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+                <div
+                    style="width:50px; height:50px; border-radius:25%; background:#528769; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <i class="fa-solid fa-wallet" style="color: #ffffff; font-size:20px;"></i>
+                </div>
+                <div style="text-align:left;">
+                    <p style="color:#3D1F1A; font-size:15px; letter-spacing:1px; font-weight:600;">INGRESO DEL MES
+                        ACTUAL</p>
+                    <p style="color:#302217; font-size:30px; font-weight:bold; margin-top:6px;">S/ {{ ingreso_mes_actual
+                        }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div
+                style="background:white; border-radius:12px;  padding:16px; flex:1; min-width:280px; box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+                <div style="display:flex; justify-content:left; gap:10px; margin-bottom:10px;">
+                    <i class="fa-solid fa-cake-candles" style="color: #302217; font-size:20px; padding-top:5px"></i>
+                    <h3 style="color:#302217; font-family: 'Playfair Display', serif; font-size:20px; margin:0;">
+                        Productos
+                        más vendidos</h3>
+                </div>
+                <canvas id="chart-mas-vendidos"></canvas>
+            </div>
+            <div
+                style="background:white; border-radius:12px;  padding:16px; flex:1; min-width:280px; box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+                <div style="display:flex; justify-content:left; gap:10px; margin-bottom:10px;">
+                    <i class="fa-solid fa-chart-line" style="color: #302217; font-size:20px; padding-top:5px"></i>
+                    <h3 style="color:#302217; font-family: 'Playfair Display', serif; font-size:20px; margin:0;">
+                        Ingresos por
+                        mes</h3>
+                </div>
+                <canvas id="chart-ingresos"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div style=" border-radius:12px; padding:16px; background: #FFFFFF; box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+        <div style="display:flex;  gap:10px; margin-bottom:10px;justify-content: left;">
+            <i class="fa-solid fa-chart-pie" style="color: #4a3524; font-size:20px; padding-top:5px"></i>
+            <h3
+                style="color:#302217; font-family: 'Playfair Display', serif; font-size:20px; margin:0; font-weight:600;">
+                Ingresos por
+                categoría</h3>
+        </div>
+        <canvas id="chart-por-categoria"></canvas>
+    </div>
+
+</div>
+<div class="tablas-dashboard" style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+
+    <!-- Productos -->
+    <div
+        style="flex:1; min-width:320px; border-radius:12px; padding:16px; background: #ffffff; box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <i class="fa-solid fa-store" style="color: #4a3524; font-size:20px; padding-top:5px"></i>
+                <h1 style="color:#4a3524; margin:0; font-size:22px; font-family: 'Playfair Display', serif;">Productos
+                </h1>
+            </div>
+            <a href="{{ url_for('admin_productos_lista') }}" style="color:#4a3524; font-size:13px; font-weight:600;">Ver
+                todos →</a>
+        </div>
+        <table style="width:100%; border-collapse:collapse; background:white; border-radius:10px; overflow:hidden;">
+            <thead>
+                <tr style="background:#302217; color:white;">
+                    <th style="text-align:left; padding:10px;font-weight:500;">Nombre</th>
+                    <th style="text-align:left; padding:10px;font-weight:500;">Categoría</th>
+                    <th style="text-align:left; padding:10px;font-weight:500;">Activo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr style="border-bottom:1px solid #eee;">
+                    <td style="padding:10px; color:#0A0A0A;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <img src="{{ producto.imagen_url or '/static/img/sitio/sin-foto.jpg' }}"
+                                alt="{{ producto.nombre }}"
+                                style="width:36px; height:36px; border-radius:25%; object-fit:cover; flex-shrink:0;">
+                            <span>{{ producto.nombre }}</span>
+                        </div>
+                    </td>
+                    <td style="padding:10px; color:#0A0A0A;">{{ producto.categoria.nombre }}</td>
+                    <td style="padding:10px;">
+                        {% if producto.activo %}<span style="color:green; font-weight:bold;">Sí</span>{% else %}<span
+                            style="color:#999;">No</span>{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Ventas -->
+    <div
+        style="flex:1; min-width:320px; border-radius:12px; padding:16px; background: #ffffff; box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <i class="fa-solid fa-cart-shopping" style="color: #4a3524; font-size:20px; padding-top:5px"></i>
+                <h1 style="color:#4a3524; margin:0; font-size:22px; font-family: 'Playfair Display', serif;">Ventas</h1>
+            </div>
+            <a href="{{ url_for('admin_ventas') }}" style="color:#4a3524; font-size:13px; font-weight:600;">Ver todas
+                →</a>
+        </div>
+        <table style="width:100%; border-collapse:collapse; background:white; border-radius:10px; overflow:hidden;">
+            <thead>
+                <tr style="background:#302217; color:white; ">
+                    <th style="text-align:left; padding:10px;font-weight:500;">Fecha</th>
+                    <th style="text-align:left; padding:10px;font-weight:500;">Productos</th>
+                    <th style="text-align:left; padding:10px;font-weight:500;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in ventas %}
+                <tr style="border-bottom:1px solid #eee;">
+                    <td style="padding:10px; color:#0A0A0A;">{{ venta.fecha.strftime('%d/%m/%Y') }}</td>
+                    <td style="padding:10px; color:#0A0A0A;">
+                        {% for d in venta.detalles %}{{ d.cantidad }}x {{ d.producto_variante.producto.nombre }}{% if
+                        not loop.last %}, {% endif %}{% endfor %}
+                    </td>
+                    <td style="padding:10px; color:#0A0A0A;">S/ {{ venta.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    async function cargarGraficos() {
+        const resMasVendidos = await fetch('/api/reportes/mas-vendidos');
+        const dataMasVendidos = await resMasVendidos.json();
+
+        new Chart(document.getElementById('chart-mas-vendidos'), {
+            type: 'bar',
+            data: {
+                labels: dataMasVendidos.labels,
+                datasets: [{
+                    label: 'Unidades vendidas',
+                    data: dataMasVendidos.valores,
+                    backgroundColor: '#a77d1d'
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+
+        const resIngresos = await fetch('/api/reportes/ingresos-por-mes');
+        const dataIngresos = await resIngresos.json();
+
+        new Chart(document.getElementById('chart-ingresos'), {
+            type: 'line',
+            data: {
+                labels: dataIngresos.labels,
+                datasets: [{
+                    label: 'Ingresos (S/)',
+                    data: dataIngresos.valores,
+                    borderColor: '#AC7E4F',
+                    backgroundColor: 'rgba(122,62,47,0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        const resCategoria = await fetch('/api/reportes/ingresos-por-categoria');
+        const dataCategoria = await resCategoria.json();
+
+        new Chart(document.getElementById('chart-por-categoria'), {
+            type: 'bar',
+            data: {
+                labels: dataCategoria.labels,
+                datasets: [{
+                    data: dataCategoria.cantidades,
+                    backgroundColor: '#a77d1d'
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        color: '#4a3524',
+                        font: { weight: 'bold' },
+                        anchor: 'end',
+                        align: 'start',
+                        formatter: (valor, contexto) => {
+                            const ingreso = dataCategoria.ingresos[contexto.dataIndex];
+                            return 'S/ ' + ingreso.toFixed(0);
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    }
+
+    cargarGraficos();
+</script>
+
+{% endblock %}

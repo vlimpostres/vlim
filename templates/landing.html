@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vlim</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Birthstone&family=Cause:wght@100..900&family=Google+Sans+Code:ital,wght,MONO@0,300..800,1;1,300..800,1&family=Imperial+Script&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&family=Monsieur+La+Doulaise&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <script src="https://kit.fontawesome.com/66e0d2610f.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Libre Bodoni', serif;
+            background-color: #000000;
+        }
+
+        h1 {
+            text-align: center;
+            color: #7a3e2f;
+        }
+
+        h2 {
+            color: #7a3e2f;
+            padding-bottom: 5px;
+        }
+
+
+        /*PRODUCTOS*/
+        .tabs-categorias {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-categoria {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 1px solid #a77d1d;
+            background: transparent;
+            color: #0A0A0A;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Libre Bodoni', serif;
+            font-size: 14px;
+        }
+
+        .tabs-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 40px 0 24px;
+        }
+
+        .tabs-wrapper .linea {
+            flex: 1;
+            height: 2px;
+            background-color: #ac915f;
+        }
+
+        .tab-categoria.activo {
+            background-color: #0A0A0A;
+            color: #F3C332;
+            border-color: #0A0A0A;
+        }
+
+        .categoria-panel {
+            display: none;
+        }
+
+        .categoria-panel.activo {
+            display: block;
+        }
+
+        /*MODAL*/
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 300;
+        }
+
+        .overlay.abierto {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            max-width: 660px;
+            width: 100%;
+            padding: 24px;
+            max-height: 95vh;
+            overflow-y: auto;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .modal button.cerrar {
+            background: #0a0a0a;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .modal-etiqueta {
+            color: #999;
+            font-size: 13px;
+        }
+
+        .modal-info {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .modal-info img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .modal-info-texto h2 {
+            color: #0A0A0A;
+            font-size: 18px;
+            margin: 0 0 6px;
+        }
+
+        .modal-info-texto p {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .modal-subtitulo {
+            color: #333;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .modal table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .modal th,
+        .modal td {
+            text-align: left;
+            padding: 8px 4px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: #0A0A0A;
+        }
+
+        .modal th {
+            color: #999;
+            font-weight: normal;
+        }
+
+        .modal button.whatsapp {
+            width: 100%;
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        /* NAV */
+        nav {
+            background-color: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            animation: aparecerArriba 0.8s ease-out;
+        }
+
+        nav .logo {
+            height: 100%;
+            width: 22%;
+        }
+
+        nav .menu {
+            display: flex;
+            gap: 100px;
+            list-style: none;
+        }
+
+        nav .menu a {
+            color: #dbb773;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        nav .menu a:hover {
+            color: #EFB810;
+        }
+
+        nav .btn-admin {
+            background-color: #dbb773;
+            color: #000000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        nav .btn-admin:hover {
+            background-color: #F3C332;
+        }
+
+
+        .hero {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            min-height: 750px;
+            display: flex;
+            align-items: center;
+            padding: 0 60px;
+            overflow: hidden;
+        }
+
+
+        .hero-texto {
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+            align-self: flex-start;
+            margin-top: 200px;
+            animation: aparecerAbajo 1s ease-out 0.3s;
+            animation-fill-mode: backwards;
+
+        }
+
+        .hero-texto h1 {
+            font-family: 'Libre Bodoni', serif;
+            font-size: 42px;
+            background: linear-gradient(180deg, #f4d783 0%, #d4a413 25%, #d4a413 50%, #d4a413 75%, #f4d783 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+            text-align: left;
+        }
+
+        .hero-texto p {
+            color: #FFFFFF;
+            margin-top: 12px;
+            font-size: 16px;
+            width: 70%;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .fondo {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 75%;
+            height: 100%;
+            z-index: 0;
+
+        }
+
+        .fondo img {
+            width: 100%;
+            height: 90%;
+            object-fit: contain;
+            object-position: bottom right;
+            display: block;
+
+        }
+
+        .fondocel {
+            display: none;
+        }
+
+        .pedidos-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: -80px;
+            position: relative;
+            z-index: 10;
+            padding: 0 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .pedidos-card {
+            background-color: #0a0a0a;
+            border: 2px solid #a77d1d;
+            border-radius: 20px;
+            padding: 30px 40px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .pedidos-items {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .pedidos-item {
+            flex: 1;
+            min-width: 160px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-align: left;
+            color: #dbb773;
+            font-size: 14px;
+        }
+
+        .pedidos-item .icono {
+            font-size: 24px;
+            margin-bottom: 0;
+            flex-shrink: 0;
+            justify-content: center;
+        }
+
+        /*Contenido*/
+        .contenido-wrapper {
+            background-color: #ffffff;
+            border-radius: 40px;
+            padding: 60px 40px 0px 40px;
+            margin: -45px 40px 0;
+            position: relative;
+            z-index: 5;
+        }
+
+        /*Promociones*/
+
+        .textoespeciales h5 {
+            color: #85680a;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .especiales-descripcion {
+            color: #0a0a0a;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .promocionescontainer {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .cardpromocion {
+            background-color: #e4e0dc;
+            overflow: hidden;
+            flex: 1;
+            min-width: 250px;
+            border: 2px solid #85680a;
+            border-radius: 8px;
+        }
+
+        .cardpromocion img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .cardpromocion-contenido {
+            padding: 16px 20px 20px;
+
+        }
+
+        .cardpromocion h2 {
+            color: #0a0a0a;
+            font-size: 20px;
+            margin-top: 0px;
+        }
+
+        .cardpromocion p {
+            color: #85680a;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .cardpromocion button.whatsapp {
+            margin-top: 15px;
+            background: #4a3524;
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .cardpromocion button.whatsapp:hover {
+            background: #a77d1d;
+        }
+
+        /*Especiales*/
+        .especiales {
+            padding: 40px 0;
+        }
+
+        .productes {
+            padding: 40px 0;
+        }
+
+        .textoespeciales {
+            text-align: center;
+            margin: 5px 0 40px 0;
+        }
+
+        .especiales-titulo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 90%;
+            /*max-width: 500px;*/
+            margin: 0 auto 30px;
+        }
+
+        .especiales-titulo-wrapper .linea {
+            flex: 1;
+            height: 2px;
+            background-color: #ac915f;
+        }
+
+        .especiales-titulo {
+            color: #0A0A0A;
+            font-size: 50px;
+            white-space: nowrap;
+        }
+
+        .especiales-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.3fr;
+            grid-template-rows: 200px 200px;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .especiales-grid img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .especiales-img1 {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .especiales-img2 {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        .especiales-img3 {
+            grid-column: 2;
+            grid-row: 1 / span 2;
+        }
+
+        .especiales-img4 {
+            grid-column: 3;
+            grid-row: 1 / span 2;
+        }
+
+        .especiales-textos {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .especiales-texto {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .especiales-texto h3 {
+            color: #0A0A0A;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .especiales-texto p {
+            color: #555;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /*Nosotros*/
+        .nosotros {
+            display: flex;
+            background: linear-gradient(to top, #e4e0dc 65%, #ffffff 100%);
+            gap: 40px;
+            align-items: center;
+            margin: 40px -40px 0;
+            flex-wrap: wrap;
+            padding: 0px 40px;
+        }
+
+        .nosotros-texto1 {
+            flex: 1.5;
+        }
+
+        .nosotros-texto1 p {
+            color: #252525;
+            line-height: 1.7;
+            margin: 30px 30px 0px 30px;
+            font-size: 18px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            justify-content: center;
+        }
+
+        .nosotros-texto1 button.whatsapp {
+            display: block;
+            margin: 20px auto 0;
+            background: #4a3524;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            width: 80%;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        .nosotros-texto1 button.whatsapp:hover {
+            background: #a77d1d;
+        }
+
+        .nosotros-texto {
+            flex: 2;
+        }
+
+        .nosotros-texto p {
+            color: #252525;
+            line-height: 1.7;
+            margin: 30px 30px 0px 30px;
+            font-size: 18px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            justify-content: center;
+        }
+
+
+        .nosotros-texto .nosotros-imagen-1 {
+            flex: 1.3;
+            min-width: 250px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nosotros-imagen-1 img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .nosotros-imagen-2 {
+            flex: 0.7;
+            min-width: 250px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nosotros-imagen-2 img {
+            width: 320px;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .encuentro {
+            display: flex;
+            background-color: #e4e0dc;
+            gap: 40px;
+            align-items: center;
+            margin: 0px -40px 0;
+            flex-wrap: wrap;
+            padding: 40px;
+            border-radius: 0px 0px 40px 40px;
+        }
+
+
+        .puntos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px 30px;
+        }
+
+        .punto-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .punto-imagen {
+            width: 120px;
+            height: 120px;
+            background-color: #0A0A0A;
+            border-radius: 16px;
+            object-fit: cover;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+
+        .punto-caja {
+            background-color: #FFFFFF;
+            border: 2px solid #ac915f;
+            border-radius: 0 20px 20px 0;
+            padding: 16px 20px 16px 40px;
+            margin-left: -20px;
+            flex: 1;
+            z-index: 1;
+        }
+
+        .punto-caja h3 {
+            color: #0A0A0A;
+            font-size: 16px;
+            margin: 0 0 6px;
+        }
+
+        .punto-caja p {
+            color: #555;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        /*Productos*/
+        .categoria-titulo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 40px 0 20px;
+        }
+
+        .categoria-titulo-wrapper h2 {
+            color: #0A0A0A;
+            font-size: 24px;
+            white-space: nowrap;
+        }
+
+        .categoria-titulo-wrapper .linea-categoria {
+            flex: 1;
+            height: 2px;
+            background-color: #ac915f;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 40px;
+        }
+
+
+        .card {
+            background: #0a0a0a;
+            border-radius: 14px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+            background-color: #eee;
+        }
+
+        .card-info {
+            padding: 14px 16px 16px;
+        }
+
+        .card-info p.nombre {
+            color: #FFFFFF;
+            font-weight: bold;
+            font-size: 16px;
+            margin: 0 0 6px;
+        }
+
+        .card-info p.precio {
+            color: #dbb773;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /*Footer*/
+        footer.footer-final {
+            background-color: #000000;
+            color: #FFFFFF;
+            padding: 50px 40px 20px;
+            margin-top: 40px;
+            font-family: 'Poppins', sans-serif;
+
+        }
+
+        .footer-columnas {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .footer-col {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-col h4 {
+            color: #ffffff;
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col ul li a {
+            color: #a5a5a5;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer-col ul li a:hover {
+            color: #F3C332;
+        }
+
+        .footer-logo {
+            text-align: center;
+            flex: 0 0 auto;
+        }
+
+        .footer-logo img {
+            width: 220px;
+            height: 220px;
+            object-fit: contain;
+            border-radius: 50%;
+            padding: 6px;
+        }
+
+        .footer-col a {
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        .footer-iconos {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .footer-iconos span {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .footer-iconos img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .footer-derechos {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-top: 40px;
+            padding-top: 16px;
+        }
+
+        @keyframes aparecerArriba {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes aparecerAbajo {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===================== RESPONSIVE (tablets y celulares) ===================== */
+        @media (max-width: 768px) {
+
+            /* --- NAV --- */
+            nav {
+                justify-content: left;
+                padding: 20px;
+            }
+
+            nav .menu {
+                display: none;
+            }
+
+            nav .logo {
+                width: 280px;
+                height: auto;
+            }
+
+            nav .btn-admin {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+                padding: 0;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+            }
+
+            /* Nota: tu media query del nav ya existe arriba (líneas 266-296), no la dupliques */
+
+            /* --- HERO --- */
+            .hero {
+                min-height: 350px;
+                flex-direction: column;
+                padding: 40px 0px 0px 0px;
+            }
+
+            .hero-texto p {
+                display: none;
+            }
+
+            .hero-texto {
+                max-width: 80%;
+                margin-top: 100px;
+                text-align: center;
+                align-self: center;
+                width: 100%;
+                padding: 0px 10px;
+            }
+
+            .hero-texto h1 {
+                font-size: 34px;
+                text-align: center;
+            }
+
+
+            .fondo {
+                display: none;
+            }
+
+            .fondocel {
+                display: block;
+                position: relative;
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            .fondocel img {
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+                display: block;
+            }
+
+            /* --- PEDIDOS --- */
+            .pedidos-card {
+                padding: 20px;
+            }
+
+            .pedidos-items {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .pedidos-wrapper {
+                margin-top: 20px;
+            }
+
+
+            /* --- CONTENEDOR GENERAL --- */
+            .contenido-wrapper {
+                margin: -45px 12px 0;
+                padding: 50px 20px 0 20px;
+            }
+
+            .encuentro,
+            .nosotros {
+                margin-left: -12px;
+                margin-right: -12px;
+                padding: 24px;
+            }
+
+            /* --- TÍTULOS DE SECCIÓN --- */
+            .especiales-titulo {
+                font-size: 30px;
+            }
+
+            /* --- PROMOCIONES --- */
+            .cardpromocion img {
+                height: 220px;
+            }
+
+
+
+            /* --- ESPECIALES (mosaico) --- */
+            .especiales-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto;
+            }
+
+            .especiales-img1,
+            .especiales-img2 {
+                grid-column: 1;
+            }
+
+            .especiales-img3 {
+                grid-column: 2;
+                grid-row: 1 / span 2;
+            }
+
+            .especiales-img4 {
+                grid-column: 1 / span 2;
+                grid-row: 3;
+                height: 200px;
+            }
+
+            .especiales-texto h3 {
+                text-align: center;
+            }
+
+            .especiales-texto p {
+                text-align: center;
+            }
+
+            /* --- NOSOTROS --- */
+            .nosotros-imagen-1 img {
+                height: 280px;
+            }
+
+            .nosotros-imagen-2 img {
+                display: none;
+            }
+
+            .nosotros-texto1 p {
+                font-size: 14px;
+                text-align: justify;
+            }
+
+            /* --- PUNTOS DE ENTREGA --- */
+            .puntos-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .punto-caja h3 {
+                font-size: 14px;
+            }
+
+            /* --- GRID DE PRODUCTOS --- */
+            .grid {
+                margin: 20px 0;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+
+            .card img {
+                aspect-ratio: 1 / 1;
+                height: auto;
+            }
+
+            .tabs-categorias {
+                gap: 12px;
+            }
+
+            /* --- MODAL --- */
+            .modal-info {
+                flex-direction: column;
+            }
+
+            .modal-info img {
+                width: 100%;
+                height: 250px;
+            }
+
+            /* --- FOOTER --- */
+            .footer-columnas {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .footer-col,
+            .footer-col[style] {
+                text-align: center !important;
+            }
+
+            .footer-iconos,
+            .footer-iconos[style] {
+                justify-content: center !important;
+            }
+        }
+
+        /* ===================== RESPONSIVE (celulares chicos) ===================== */
+        @media (max-width: 480px) {
+            .hero-texto h1 {
+                font-size: 27px;
+            }
+
+            .especiales-titulo {
+                font-size: 24px;
+            }
+
+            .pedidos-item {
+                font-size: 13px;
+            }
+
+            .card-info p.nombre {
+                font-size: 14px;
+            }
+
+            .nosotros-imagen-1 img {
+                height: 205px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <img class="logo" src="/static/img/sitio/logovlim.png" alt="logoVlim">
+        <ul class="menu" id="menu-nav">
+            <li><a href="#promociones">Promociones</a></li>
+            <li><a href="#especiales">Especiales</a></li>
+            <li><a href="#productos">Productos</a></li>
+            <li><a href="#nosotros">Nosotros</a></li>
+        </ul>
+        <button class="btn-admin" onclick="window.location.href='/admin/login'"><i
+                class="fa-solid fa-user"></i></button>
+    </nav>
+    <header class="hero">
+        <div class="hero-texto">
+            <h1>Dulces momentos, hechos a mano para tus momentos especiales</h1>
+            <p>Sabores únicos, ingredientes de calidad, y el toque especial que solo VLIM le da a tus reuniones.</p>
+        </div>
+        <div class="fondo">
+            <img src="/static/img/sitio/fondote.jpg" alt="">
+        </div>
+        <div class="fondocel">
+            <img src="/static/img/sitio/fondotecel.png" alt="">
+        </div>
+    </header>
+
+    <!-- Pedidos -->
+    <div class="pedidos-wrapper">
+        <div class="pedidos-card">
+            <div class="linea"></div>
+            <div class="pedidos-items">
+                <div class="pedidos-item">
+                    <div class="icono"><i class="fa-regular fa-calendar" style="color: #EFB810;"></i></div>
+                    Realiza tu pedido con 2 días de anticipación
+                </div>
+                <div class="pedidos-item">
+                    <div class="icono"><i class="fa-solid fa-cart-shopping" style="color: #ef1010;"></i></div>
+                    Confírmalo con el 50% de adelanto
+                </div>
+                <div class="pedidos-item">
+                    <div class="icono"><i class="fa-solid fa-money-bill" style="color: #48bd44;"></i></div>
+                    Aceptamos transferencia, Yape, Plin o efectivo
+                </div>
+                <div class="pedidos-item">
+                    <div class="icono"><i class="fa-solid fa-check" style="color: #6bd140;"></i></div>
+                    ¡Listo! Disfruta tu pedido
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contenido-wrapper">
+        <div class="promociones" id="promociones">
+            <div class="textoespeciales">
+                <h5>DESCUBRE NUESTROS</h5>
+                <div class="especiales-titulo-wrapper">
+                    <span class="linea"></span>
+                    <h2 class="especiales-titulo">Packs Fiesteros</h2>
+                    <span class="linea"></span>
+                </div>
+                <p class="especiales-descripcion">Elige la promoción que más se adapte a tu celebración. Cada una está
+                    diseñada para ofrecerte la mejor
+                    experiencia.</p>
+            </div>
+            <div class="promocionescontainer">
+                <div class="cardpromocion">
+                    <img src="/static/img/productos/packpremium.png" alt="Packpremium">
+                    <div class="cardpromocion-contenido">
+                        <h2>Pack Premium</h2>
+                        <p>Torta personalizada, 5 bocaditos salados y 5 bocaditos dulces.</p>
+                        <button class="whatsapp"
+                            onclick="window.open('https://wa.me/51921730450?text=Hola,%20quisiera%20pedir%20información%20sobre:%20Promoción%20Premium', '_blank')">Más
+                            información</button>
+                    </div>
+
+                </div>
+                <div class="cardpromocion">
+                    <img src="/static/img/productos/packintermedio.png" alt="PackIntermedio">
+                    <div class="cardpromocion-contenido">
+                        <h2>Pack Intermedio</h2>
+                        <p>Torta Personalizada, 3 bocaditos salados y 3 bocaditos dulces.</p>
+                        <button class="whatsapp"
+                            onclick="window.open('https://wa.me/51921730450?text=Hola,%20quisiera%20pedir%20información%20sobre:%20Promoción%20Intermedia', '_blank')">Más
+                            información</button>
+                    </div>
+
+                </div>
+                <div class="cardpromocion">
+                    <img src="/static/img/productos/packmini.png" alt="Packmini">
+                    <div class="cardpromocion-contenido">
+                        <h2>Pack Mini</h2>
+                        <p>Mini Torta personalizada, 2 bocaditos salados y 2 bocaditos dulces.</p>
+                        <button class="whatsapp"
+                            onclick="window.open('https://wa.me/51921730450?text=Hola,%20quisiera%20pedir%20información%20sobre:%20Promoción%20Básica', '_blank')">Más
+                            información</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <section class="especiales" id="especiales">
+            <div class="textoespeciales">
+                <h5>DESCUBRE NUESTROS</h5>
+                <div class="especiales-titulo-wrapper">
+                    <span class="linea"></span>
+                    <h2 class="especiales-titulo">Especiales</h2>
+                    <span class="linea"></span>
+                </div>
+                <p class="especiales-descripcion">Creaciones únicas hechas con dedicación, disponibles por tiempo
+                    limitado. <b> Pedir con 4 o 3 semanas de anticipación.</b>.</p>
+            </div>
+
+            <div class="especiales-grid">
+                <img class="especiales-img1" src="/static/img/productos/corazonesrosas.jfif" alt="PackCorazonesRosas">
+                <img class="especiales-img2" src="/static/img/productos/donass.jfif" alt="Donas">
+                <img class="especiales-img3" src="/static/img/productos/tortaspidey.png" alt="AlfajorCorazon">
+                <img class="especiales-img4" src="/static/img/productos/alfajorcorazon.jpg" alt="TortaSpidey">
+            </div>
+
+            <div class="especiales-textos">
+                <div class="especiales-texto">
+                    <h3>Tortas de temporada</h3>
+                    <p>Sabores especiales disponibles solo por tiempo limitado, hechos con ingredientes de estación.</p>
+                </div>
+                <div class="especiales-texto">
+                    <h3>Recetas caseras</h3>
+                    <p>Elaborados a mano con recetas propias, pensados para cada celebración especial.</p>
+                </div>
+            </div>
+        </section>
+        <section class="productes" id="productos">
+            <div class="textoespeciales">
+                <h5>DESCUBRE NUESTROS</h5>
+                <div class="especiales-titulo-wrapper">
+                    <span class="linea"></span>
+                    <h2 class="especiales-titulo">Productos</h2>
+                    <span class="linea"></span>
+                </div>
+            </div>
+
+            <!--Productos-->
+
+            <div class="tabs-wrapper">
+                <span class="linea"></span>
+                <div class="tabs-categorias" id="tabs-categorias">
+                    {% for categoria in categorias %}
+                    <button class="tab-categoria {% if loop.first %}activo{% endif %}"
+                        onclick="mostrarCategoria('{{ categoria.id_categorias }}')"
+                        data-cat="{{ categoria.id_categorias }}">
+                        {{ categoria.nombre|upper }}
+                    </button>
+                    {% endfor %}
+                </div>
+                <span class="linea"></span>
+            </div>
+
+            {% for categoria in categorias %}
+            <div class="categoria-panel {% if loop.first %}activo{% endif %}"
+                data-panel="{{ categoria.id_categorias }}">
+                <div class="grid">
+                    {% for producto in categoria.productos|selectattr('activo')|list %}
+                    <div class="card" data-id="{{ producto.id_productos }}" onclick="abrirDetalle(this.dataset.id)">
+                        <img src="{{ producto.imagen_url or '/static/img/sitio/sin-foto.jpg' }}"
+                            alt="{{ producto.nombre }}">
+                        <div class="card-info">
+                            <p class="nombre">{{ producto.nombre }}</p>
+                            {% if producto.variantes %}
+                            <p class="precio">Desde S/ {{ producto.variantes|map(attribute='precio')|min }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <!--Modal-->
+            <div class="overlay" id="overlay">
+                <div class="modal">
+                    <div class="modal-header">
+                        <button class="cerrar" onclick="cerrarDetalle()"> Volver</button>
+                        <span class="modal-etiqueta">Detalle del producto</span>
+                    </div>
+
+                    <div class="modal-info">
+                        <img id="modal-img" src="" alt="">
+                        <div class="modal-info-texto">
+                            <h2 id="modal-nombre"></h2>
+                            <p id="modal-desc"></p>
+                        </div>
+                    </div>
+
+                    <p class="modal-subtitulo">Tamaños de producción estándar</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Porciones</th>
+                                <th>Tamaño</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal-tabla"></tbody>
+                    </table>
+
+                    <button class="whatsapp" onclick="pedirWhatsapp()">Pedir por WhatsApp</button>
+                </div>
+            </div>
+        </section>
+        <!--Nosotros-->
+        <div class="nosotros" id="nosotros">
+            <div class="nosotros-texto1">
+                <div class="textoespeciales">
+                    <h5>¿QUIIÉNES SOMOS?</h5>
+                    <div class="especiales-titulo-wrapper">
+                        <span class="linea"></span>
+                        <h2 class="especiales-titulo">Nosotros</h2>
+                        <span class="linea"></span>
+                    </div>
+
+                </div>
+                <p>En Vlim, nos dedicamos a crear postres que endulzan tus celebraciones. Cada torta, keke y pack
+                    fiestero
+                    es elaborado con dedicación y pasión, asegurando que cada bocado sea una experiencia memorable.
+                    Nuestro
+                    compromiso es ofrecer productos de alta calidad que complementen tus momentos especiales.</p>
+                <button class="whatsapp"
+                    onclick="window.open('https://whatsapp.com/channel/0029Vb5pKhu2v1IkT36kVh33', '_blank')">
+                    Únete a nuestra comunidad de WhatsApp
+                </button>
+            </div>
+            <div class="nosotros-imagen-1">
+                <img src="/static/img/productos/tortanosotros.png" alt="Tortanosotros">
+            </div>
+        </div>
+        <div class="encuentro">
+            <div class="nosotros-imagen-2">
+                <img src="/static/img/productos/cake.png" alt="Cakenosotros">
+            </div>
+            <div class="nosotros-texto1">
+                <div class="textoespeciales">
+                    <h5>NUESTROS</h5>
+                    <div class="especiales-titulo-wrapper">
+                        <span class="linea"></span>
+                        <h2 class="especiales-titulo">Puntos de Entrega</h2>
+                        <span class="linea"></span>
+                    </div>
+                </div>
+                <div class="puntos-encuentro" id="puntos-encuentro">
+                    <div class="puntos-grid">
+                        <div class="punto-item">
+                            <img class="punto-imagen" src="/static/img/sitio/unmsm.jpg" alt="Unis">
+                            <div class="punto-caja">
+                                <h3>Universidades</h3>
+                                <p>UNMSM - UPC (SanMiguel) - UNI - UNAC - UPN(Los Olivos)</p>
+                            </div>
+                        </div>
+                        <div class="punto-item">
+                            <img class="punto-imagen" src="/static/img/sitio/plaza.jpeg" alt="Plazas">
+                            <div class="punto-caja">
+                                <h3>Centros Comerciales</h3>
+                                <p>Plaza Sanmiguel - Plaza Norte - Plaza Center Rex - Mega Plaza</p>
+                            </div>
+                        </div>
+                        <div class="punto-item">
+                            <img class="punto-imagen" src="/static/img/sitio/losolivos.png" alt="SMPLosOlivos">
+                            <div class="punto-caja">
+                                <h3>SMP - Los Olivos</h3>
+                                <p>Ciertos puntos acordados a la hora de realizar el pedido.</p>
+                            </div>
+                        </div>
+                        <!--
+                        <div class="punto-item">
+                            <img class="punto-imagen" src="/static/img/sitio/punto4.jpg" alt="Punto 4">
+                            <div class="punto-caja">
+                                <h3>Nombre del punto</h3>
+                                <p>Descripción o dirección del lugar de encuentro.</p>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function mostrarCategoria(idCategoria) {
+            document.querySelectorAll('.tab-categoria').forEach(tab => {
+                tab.classList.toggle('activo', tab.dataset.cat === idCategoria);
+            });
+            document.querySelectorAll('.categoria-panel').forEach(panel => {
+                panel.classList.toggle('activo', panel.dataset.panel === idCategoria);
+            });
+        }
+        async function abrirDetalle(id) {
+            const res = await fetch(`/api/producto/${id}`);
+            const data = await res.json();
+
+            document.getElementById('modal-img').src = data.imagen_url || 'https://via.placeholder.com/400x160?text=Sin+foto';
+            document.getElementById('modal-nombre').textContent = data.nombre;
+            document.getElementById('modal-desc').textContent = data.descripcion || '';
+
+            const tabla = document.getElementById('modal-tabla');
+            tabla.innerHTML = data.variantes.map(v => `
+                <tr>
+                    <td>${v.porciones || '-'}</td>
+                    <td>${v.tamano || '-'}</td>
+                    <td>S/ ${v.precio.toFixed(2)}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('overlay').classList.add('abierto');
+        }
+
+        function cerrarDetalle() {
+            document.getElementById('overlay').classList.remove('abierto');
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                const overlay = document.getElementById('overlay');
+
+                if (overlay.classList.contains('abierto')) {
+                    cerrarDetalle();
+                }
+            }
+        });
+
+        function pedirWhatsapp() {
+            const nombre = document.getElementById('modal-nombre').textContent;
+            const numero = '51921730450';
+            const mensaje = encodeURIComponent(`Hola, quisiera pedir información sobre: ${nombre}`);
+            window.open(`https://wa.me/${numero}?text=${mensaje}`, '_blank');
+        }
+    </script>
+
+    <footer class="footer-final">
+        <div class="footer-columnas">
+            <div class="footer-col">
+                <h4>Contenido</h4>
+                <ul>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#promociones">Promociones</a></li>
+                    <li><a href="#especiales">Especiales</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                </ul>
+                <h4>
+                    <p class="footer-terminos"><a href="{{ url_for('terminos') }}">Términos y condiciones</a></p>
+                </h4>
+            </div>
+
+            <div class="footer-logo">
+                <img src="/static/img/sitio/logo.png" alt="VLIM">
+
+            </div>
+
+            <div class="footer-col" style="text-align:right;">
+                <h4>Contáctanos</h4>
+                <p style="font-size:14px; color: #a5a5a5;">+51 921 730 450</p>
+                <p style="font-size:14px; color: #a5a5a5;">vlim@gmail.com</p>
+                <div class="footer-iconos" style="justify-content:flex-end;">
+                    <span><i class="fa-brands fa-facebook" style="color: #a5a5a5; font-size: 34px;"></i></span>
+                    <span><i class="fa-brands fa-instagram" style="color: #a5a5a5; font-size: 34px;"></i></span>
+                    <span><i class="fa-brands fa-whatsapp" style="color: #a5a5a5; font-size: 34px;"></i></span>
+                </div>
+                <h4 style="margin-top:16px;">Métodos de pago</h4>
+                <div class="footer-iconos" style="justify-content:flex-end;">
+                    <span><img src="/static/img/sitio/yape.png" alt=""></span>
+                    <span><img src="/static/img/sitio/plin.png" alt=""></span>
+                    <span><img src="/static/img/sitio/visa.png" alt=""></span>
+                    <span><img src="/static/img/sitio/efectivo.png" alt=""></span>
+                </div>
+            </div>
+        </div>
+
+        <p class="footer-derechos">© 2026 Vlim — Todos los derechos reservados</p>
+        <p class="footer-derechos" style="padding-top:4px; margin-top:0;font-size:11px;">Sitio desarrollado por Dario
+            Rodríguez</p>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ producto.nombre }} - Vlim{% endblock %}
+
+{% block estilos %}
+@media (max-width: 768px) {
+    table {
+        font-size: 12px !important;
+    }
+
+    table th, table td {
+        padding: 6px !important;
+    }
+
+    form[style*="max-width:400px"] {
+        max-width: 100% !important;
+    }
+}
+{% endblock %}
+
+{% block contenido %}
+
+<a href="{{ url_for('admin_productos_lista') }}"
+    style="background:#0A0A0A; color:#ffffff; padding:10px 20px; border-radius:8px; text-decoration:none; font-size:14px; white-space:nowrap;">&larr;
+    Volver
+    a productos</a>
+<div style="display:flex; align-items:center; gap:16px; margin-bottom:24px; margin-top: 20px;">
+    <h1 style="color:#0A0A0A; margin:0;">{{ producto.nombre }}</h1>
+</div>
+<p style="color:#555; margin-bottom:20px;">{{ producto.descripcion }}</p>
+
+<h2 style="color:#0A0A0A; margin-bottom:12px;">Variantes de precio</h2>
+<table
+    style="width:100%; max-width:500px; border-collapse:collapse; background:white; border-radius:10px; overflow:hidden; margin-bottom:24px; font-size:14px;box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+    <thead>
+        <tr style="background:#0A0A0A; color:white;">
+            <th style="text-align:left; padding:8px; font-weight:600;">Porciones</th>
+            <th style="text-align:left; padding:8px; font-weight:600;">Tamaño</th>
+            <th style="text-align:left; padding:8px; font-weight:600;">Precio</th>
+            <th style="text-align:left; padding:8px; font-weight:600;">Tipo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for v in producto.variantes %}
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:8px; color:#0A0A0A;">{{ v.porciones }}</td>
+            <td style="padding:8px; color:#0A0A0A;">{{ v.tamano_aprox }}</td>
+            <td style="padding:8px; color:#0A0A0A;">S/ {{ v.precio }}</td>
+            <td style="padding:8px; color:#0A0A0A;">{{ v.tipo }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 style="color:#0A0A0A; margin-bottom:12px;">Agregar variante</h2>
+<form method="POST" action="{{ url_for('admin_variante_nueva', id=producto.id_productos) }}"
+    style="background:white; padding:20px; border-radius:12px; max-width:400px;box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+    <label style="display:block; font-size:13px; margin-top:8px;">Porciones</label>
+    <input type="text" name="porciones" placeholder="Ej: 8 a 10" required
+        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+
+    <label style="display:block; font-size:13px; margin-top:8px;">Tamaño aproximado</label>
+    <input type="text" name="tamano_aprox" placeholder="Ej: Ø 20 cm, 2 capas" required
+        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+
+    <label style="display:block; font-size:13px; margin-top:8px;">Precio (S/)</label>
+    <input type="number" name="precio" step="0.01" required
+        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+
+    <label style="display:block; font-size:13px; margin-top:8px;">Tipo</label>
+    <select name="tipo"
+        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+        <option value="estandar">Estándar</option>
+        <option value="a_pedido">A pedido</option>
+    </select>
+
+    <button type="submit"
+        style="margin-top:16px; width:100%; padding:10px; background:#0A0A0A; color:#f5e9d0; border:none; border-radius:8px; cursor:pointer;">Agregar
+        variante</button>
+</form>
+{% endblock %}

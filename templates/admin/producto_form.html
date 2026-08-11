@@ -1,0 +1,51 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ 'Editar Producto' if producto else 'Nuevo Producto' }} - Vlim{% endblock %}
+
+{% block estilos %}
+@media (max-width: 768px) {
+    form[style*="max-width:420px"] {
+        max-width: 100% !important;
+    }
+}
+{% endblock %}
+
+{% block contenido %}
+
+<a href="{{ url_for('admin_productos_lista') }}"
+    style="background:#0A0A0A; color:#ffffff; padding:10px 20px; border-radius:8px; text-decoration:none; font-size:14px; white-space:nowrap;">&larr;
+    Volver
+    a productos</a>
+<div style="display:flex; align-items:center; gap:16px; margin-bottom:24px; margin-top: 20px;">
+    <h1 style="color:#0A0A0A; margin:0;">{{ 'Editar Producto' if producto else
+        'Nuevo Producto' }}</h1>
+</div>
+
+<form method="POST" enctype="multipart/form-data"
+    style="background:white; padding:24px; border-radius:12px; max-width:420px; box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+    <label style="display:block; font-size:13px; margin-top:10px;">Nombre</label>
+    <input type="text" name="nombre" value="{{ producto.nombre if producto else '' }}" required
+        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+
+    <label style="display:block; font-size:13px; margin-top:10px;">Descripción</label>
+    <textarea name="descripcion" rows="3"
+        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">{{ producto.descripcion if producto else '' }}</textarea>
+
+    <label style="display:block; font-size:13px; margin-top:10px;">Categoría</label>
+    <select name="id_categoria" required
+        style="width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;">
+        {% for cat in categorias %}
+        <option value="{{ cat.id_categorias }}" {% if producto and producto.id_categoria==cat.id_categorias %}selected{%
+            endif %}>{{ cat.nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <label style="display:block; font-size:13px; margin-top:10px;">Imagen {% if producto %}(deja vacío para no
+        cambiarla){% endif %}</label>
+    <input type="file" name="imagen" accept="image/*" style="width:100%;">
+
+    <button type="submit"
+        style="margin-top:20px; width:100%; padding:10px; background:#0A0A0A; color:#f5e9d0; border:none; border-radius:8px; cursor:pointer;">{{
+        'Guardar cambios' if producto else 'Guardar producto' }}</button>
+</form>
+{% endblock %}

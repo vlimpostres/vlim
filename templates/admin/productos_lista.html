@@ -1,0 +1,97 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Productos - Vlim{% endblock %}
+
+{% block estilos %}
+@media (max-width: 768px) {
+    .tabla-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 500px;
+    }
+
+    table th, table td {
+        font-size: 13px;
+        padding: 8px !important;
+        white-space: nowrap;
+    }
+
+    div[style*="justify-content:space-between"] > h1,
+    div[style*="margin-bottom:24px"] {
+        flex-wrap: wrap !important;
+    }
+
+    a[style*="white-space:nowrap"] {
+        white-space: normal !important;
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+}
+{% endblock %}
+
+{% block contenido %}
+<div
+    style="display:flex; flex-direction:column; gap:24px; background:#FFFFFF; padding:20px; border-radius:10px; box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom:24px;">
+        <h1 style="color:#4a3524; margin:0; font-family:'Playfair Display', serif;">Productos</h1>
+        <span style="flex:1; height:1px; background-color:#4a3524;"></span>
+        <a href="{{ url_for('admin_producto_form') }}"
+            style="background:#0A0A0A; color:#ffffff; padding:10px 20px; border-radius:8px; text-decoration:none; font-size:14px; white-space:nowrap;">+
+            Registrar producto</a>
+    </div>
+    <div class="tabla-scroll">
+        <table style="width:100%; border-collapse:collapse; background:white; border-radius:10px; overflow:hidden;">
+            <thead>
+                <tr style="background:#0A0A0A; color:white;">
+                    <th style="text-align:left; padding:10px; font-weight:600;">Nombre</th>
+                    <th style="text-align:left; padding:10px; font-weight:600;">Categoría</th>
+                    <th style="text-align:left; padding:10px; font-weight:600;">Activo</th>
+                    <th style="text-align:left; padding:10px; font-weight:600;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr style="border-bottom:1px solid #eee;">
+                    <td style="padding:10px;">
+                        <a href="{{ url_for('admin_producto_detalle', id=producto.id_productos) }}"
+                            style="display:flex; align-items:center; gap:10px; color:#0A0A0A; text-decoration:none;">
+                            <img src="{{ producto.imagen_url or '/static/img/sitio/sin-foto.jpg' }}"
+                                alt="{{ producto.nombre }}"
+                                style="width:36px; height:36px; border-radius:25%; object-fit:cover; flex-shrink:0;">
+                            <span>{{ producto.nombre }}</span>
+                        </a>
+                    </td>
+                    <td style="padding:10px; text-decoration:none; color:#0A0A0A;">{{ producto.categoria.nombre }}</td>
+                    <td style="padding:10px;">
+                        {% if producto.activo %}<span style="color:#4a3524; font-weight:bold;">Sí</span>{% else %}<span
+                            style="color:#b63131;">No</span>{% endif %}
+                    </td>
+                    <td style="padding:10px;">
+                        <a style="text-decoration:none; color:#4a3524;"
+                            href="{{ url_for('admin_producto_form', id=producto.id_productos) }}">Editar</a> |
+                        {% if producto.activo %}
+                        <form style="display:inline" method="POST"
+                            action="{{ url_for('admin_producto_eliminar', id=producto.id_productos) }}"
+                            onsubmit="return confirm('¿Desactivar este producto?')">
+                            <button type="submit"
+                                style="border:none; background:none; color:#c0392b; cursor:pointer; text-decoration:none; padding:0;">Eliminar</button>
+                        </form>
+                        {% else %}
+                        <form style="display:inline" method="POST"
+                            action="{{ url_for('admin_producto_activar', id=producto.id_productos) }}">
+                            <button type="submit"
+                                style="border:none; background:none; color:green; cursor:pointer; text-decoration:underline; padding:0;">Reactivar</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

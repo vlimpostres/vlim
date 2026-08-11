@@ -1,0 +1,70 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Ventas - Vlim{% endblock %}
+
+{% block estilos %}
+@media (max-width: 768px) {
+    div[style*="justify-content:space-between"],
+    div[style*="margin-bottom:24px"] {
+        flex-wrap: wrap !important;
+    }
+
+    a[style*="white-space:nowrap"] {
+        white-space: normal !important;
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .tabla-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 500px;
+    }
+
+    table th, table td {
+        font-size: 13px;
+        padding: 8px !important;
+        white-space: nowrap;
+    }
+}
+{% endblock %}
+
+{% block contenido %}
+<div
+    style="display:flex; flex-direction:column; gap:24px; background:#FFFFFF; padding:20px; border-radius:10px; box-shadow: 0 5px 5px rgba(92,61,46,.25);">
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom:24px;">
+        <h1 style="color:#4a3524; margin:0; font-size:36px; font-family: 'Playfair Display', serif;">VENTAS</h1>
+        <span style="flex:1; height:1px; background-color:#4a3524;"></span>
+        <a href="{{ url_for('admin_venta_nueva') }}"
+            style="background:#0A0A0A; color:#ffffff; padding:10px 20px; border-radius:8px; text-decoration:none; font-size:14px; white-space:nowrap;">+
+            Registrar venta</a>
+    </div>
+    <div class="tabla-scroll">
+        <table style="width:100%; border-collapse:collapse; background:white; border-radius:10px; overflow:hidden;">
+            <thead>
+                <tr style="background:#0A0A0A; color:white;">
+                    <th style="text-align:left; padding:10px; font-weight:600;">Fecha</th>
+                    <th style="text-align:left; padding:10px; font-weight:600;">Productos</th>
+                    <th style="text-align:left; padding:10px; font-weight:600;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in ventas %}
+                <tr style="border-bottom:1px solid #eee;">
+                    <td style="padding:10px; color:#0A0A0A;">{{ venta.fecha.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td style="padding:10px; color:#0A0A0A;">
+                        {% for d in venta.detalles %}{{ d.cantidad }}x {{ d.producto_variante.producto.nombre }}{% if not
+                        loop.last %}, {% endif %}{% endfor %}
+                    </td>
+                    <td style="padding:10px; color:#0A0A0A;">S/ {{ venta.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Panel Vlim{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Birthstone&family=Cause:wght@100..900&family=Google+Sans+Code:ital,wght,MONO@0,300..800,1;1,300..800,1&family=Imperial+Script&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&family=Monsieur+La+Doulaise&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://kit.fontawesome.com/66e0d2610f.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #e4e0dc;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #0A0A0A;
+            color: #FFFFFF;
+            padding: 24px 16px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            text-align: center;
+        }
+
+        .sidebar-logo img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            border-radius: 50%;
+            padding: 6px;
+        }
+
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ccc;
+            text-decoration: none;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.activo {
+            background-color: #e0b15a;
+            color: #0A0A0A;
+            font-weight: bold;
+        }
+
+        .sidebar-nav hr {
+            border: none;
+            border-top: 1px solid #333;
+            margin: 16px 0;
+        }
+
+        /*barra para cel*/
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 200;
+            background: #0A0A0A;
+            color: #e9d6b2;
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 150;
+        }
+
+        .sidebar-overlay.abierto {
+            display: block;
+        }
+
+        .contenido-principal {
+            flex: 1;
+            padding: 20px 40px;
+            overflow-x: auto;
+        }
+
+            {% block estilos %} {% endblock %}
+
+        @media (max-width: 768px) {
+            body {
+                display: block;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                z-index: 160;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                overflow-y: auto;
+            }
+
+            .sidebar.abierto {
+                transform: translateX(0);
+            }
+
+            .contenido-principal {
+                padding: 70px 16px 20px;
+            }
+
+            .sidebar-logo img {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+
+<body>
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="/static/img/sitio/logo.png" alt="Vlim">
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('admin_dashboard') }}"
+                class="{% if request.endpoint == 'admin_dashboard' %}activo{% endif %}"><i class="fa-solid fa-house"
+                    style="color: #e9d6b2; padding: 5px;"></i>
+                Dahsboard</a>
+            <a href="{{ url_for('admin_venta_nueva') }}"
+                class="{% if request.endpoint == 'admin_venta_nueva' %}activo{% endif %}"><i
+                    class="fa-solid fa-cart-shopping" style="color: #e9d6b2; padding: 5px;"></i>
+                Registrar venta</a>
+            <a href="{{ url_for('admin_producto_form') }}"
+                class="{% if request.endpoint == 'admin_producto_form' %}activo{% endif %}">
+                <i class="fa-solid fa-store" style="color: #e9d6b2; padding: 5px;"></i>
+                Registrar producto
+            </a>
+            <a href="{{ url_for('admin_ventas') }}"
+                class="{% if request.endpoint == 'admin_ventas' %}activo{% endif %}"><i
+                    class="fa-solid fa-cart-shopping" style="color: #e9d6b2; padding: 5px;"></i>
+                Ver ventas</a>
+            <a href="{{ url_for('admin_productos_lista') }}"
+                class="{% if request.endpoint == 'admin_productos_lista' %}activo{% endif %}"><i
+                    class="fa-solid fa-store" style="color: #e9d6b2; padding: 5px;"></i>
+                Ver productos</a>
+            <hr>
+            <a href="{{ url_for('admin_logout') }}"><i class="fa-solid fa-right-from-bracket"
+                    style="color: #e9d6b2; padding: 5px;"></i>
+                Cerrar sesión</a>
+        </nav>
+        <img src="/static/img/sitio/hojas.png" alt="Vlim"
+            style="width:100%; margin-top:20px; border-radius:10px;  filter: brightness(0.7);">
+    </aside>
+
+    <main class="contenido-principal">
+        {% block contenido %}{% endblock %}
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('abierto');
+            document.getElementById('sidebar-overlay').classList.toggle('abierto');
+        }
+    </script>
+</body>
+
+</html>

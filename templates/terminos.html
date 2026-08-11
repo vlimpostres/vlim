@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Términos y Condiciones - Vlim</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cause:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cause', sans-serif;
+        }
+
+        body {
+            background-color: #FFFFFF;
+            color: #0A0A0A;
+            padding: 40px 20px;
+        }
+
+        .contenedor {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        a.volver {
+            color: #D4A413;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #0A0A0A;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #B8860B;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        p {
+            line-height: 1.7;
+            color: #333;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contenedor">
+        <a class="volver" href="{{ url_for('home') }}">&larr; Volver al inicio</a>
+        <h1>Términos y Condiciones</h1>
+        <p>Última actualización: Julio 2026</p>
+
+        <h2>1. Pedidos</h2>
+        <p>Los pedidos deben realizarse con un mínimo de 2 días de anticipación. La confirmación del pedido requiere un
+            anticipo del 50% del monto total.</p>
+
+        <h2>2. Métodos de pago</h2>
+        <p>Aceptamos pagos por transferencia bancaria, Yape, Plin y efectivo contra entrega.</p>
+
+        <h2>3. Cancelaciones</h2>
+        <p>Las cancelaciones deben comunicarse con al menos 24 horas de anticipación. El anticipo no es reembolsable en
+            caso de cancelación fuera de este plazo.</p>
+
+        <h2>4. Entrega</h2>
+        <p>Los pedidos se entregan en los puntos de encuentro acordados, o mediante coordinación directa con el negocio.
+        </p>
+
+        <h2>5. Modificaciones</h2>
+        <p>Vlim se reserva el derecho de modificar estos términos y condiciones en cualquier momento, sin previo aviso.
+        </p>
+    </div>
+</body>
+
+</html>
