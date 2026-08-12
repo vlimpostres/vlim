@@ -1,12 +1,13 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash
+import os
 from config import Config
 from models import db, Categoria, Producto, Administrador, ProductoVariante, Venta, DetalleVenta
-import os
-from werkzeug.utils import secure_filename
 from sqlalchemy import func
 from datetime import datetime
+import cloudinary
+import cloudinary.uploader
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -15,6 +16,13 @@ db.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'admin_login'
+
+cloudinary.config(
+    cloud_name=app.config['CLOUDINARY_CLOUD_NAME'],
+    api_key=app.config['CLOUDINARY_API_KEY'],
+    api_secret=app.config['CLOUDINARY_API_SECRET'],
+    secure=True
+)
 
 @login_manager.user_loader
 def load_user(id_admin):
@@ -83,7 +91,6 @@ def admin_logout():
     logout_user()
     return redirect(url_for('home'))
 
-app.config['UPLOAD_FOLDER'] = 'static/img/productos'
 
 @app.route('/admin/producto/<int:id>')
 @login_required
@@ -123,10 +130,8 @@ def admin_producto_form(id=None):
         imagen_url = producto.imagen_url if producto else None
         archivo = request.files.get('imagen')
         if archivo and archivo.filename != '':
-            nombre_archivo = secure_filename(archivo.filename)
-            ruta_guardado = os.path.join(app.config['UPLOAD_FOLDER'], nombre_archivo)
-            archivo.save(ruta_guardado)
-            imagen_url = '/' + ruta_guardado.replace('\\', '/')
+            resultado = cloudinary.uploader.upload(archivo)
+            imagen_url = resultado['secure_url']
 
         if producto:
             producto.nombre = nombre
