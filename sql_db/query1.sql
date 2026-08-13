@@ -51,3 +51,6 @@ create table administradores (
     user varchar(50) unique not null,
     password_hash varchar(255) not null 
 );
+
+
+INSERT INTO categorias (nombre) VALUES ('Tortas'), ('Mini Bocaditos Dulces'), ('Mini Bocaditos Salados'), ('Postres Personales')

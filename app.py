@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash
@@ -8,6 +11,7 @@ from sqlalchemy import func
 from datetime import datetime
 import cloudinary
 import cloudinary.uploader
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -23,6 +27,7 @@ cloudinary.config(
     api_secret=app.config['CLOUDINARY_API_SECRET'],
     secure=True
 )
+
 
 @login_manager.user_loader
 def load_user(id_admin):

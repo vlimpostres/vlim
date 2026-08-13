@@ -1,3 +1,9 @@
+from dotenv import load_dotenv
+load_dotenv()
+
+import os
+print("Conectando a:", os.environ.get('DATABASE_URL'))
+
 from flask import Flask
 from config import Config
 from models import db, Administrador
@@ -8,8 +14,8 @@ app.config.from_object(Config)
 db.init_app(app)
 
 with app.app_context():
-    usuario = 'valeAdmin'
-    password = 'ValeVlim262805'
+    usuario = 'valeadmin'
+    password = 'ValeVlim280605'
 
     if Administrador.query.filter_by(user=usuario).first():
         print('Ese usuario ya existe.')
